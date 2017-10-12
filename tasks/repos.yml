@@ -4,7 +4,16 @@
     description: packages by rabbitmq from Bintray
     name: bintraybintray-rabbitmq-rabbitmq-server-rpm
     baseurl: https://dl.bintray.com/rabbitmq/rabbitmq-server-rpm
-    gpgcheck: yes
     gpgkey: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+    gpgcheck: yes
+    enabled: yes
+  register: repo_status
+
+- name: Install rabbitmq erlang repo
+  yum_repository:
+    name: rabbitmq-erlang
+    baseurl: "https://dl.bintray.com/rabbitmq/rpm/erlang/{{ erlang_version.split('.')[0] }}/el/$releasever"
+    gpgkey: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+    gpgcheck: yes
     enabled: yes
   register: repo_status
