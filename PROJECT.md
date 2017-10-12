@@ -51,6 +51,8 @@ enabled=1
 
 [rabbitmq_aws-0.9.0.ez](https://github.com/rabbitmq/rabbitmq-autocluster/releases/download/0.9.0/rabbitmq_aws-0.9.0.ez)
 
+[rabbitmq_message_timestamp-1.0.0.ez](https://bintray.com/rabbitmq/community-plugins/download_file?file_path=rabbitmq_message_timestamp-1.0.0.ez)
+
 
 ### Official plugins
 
@@ -108,7 +110,7 @@ enabled=1
 * [autocluster](https://github.com/rabbitmq/rabbitmq-autocluster), Automatically cluster RabbitMQ nodes using Consul, etcd or DNS for service discovery.
 * [rabbitmq-auth-backend-ip-range](https://github.com/gotthardp/rabbitmq-auth-backend-ip-range), Provides the ability for your RabbitMQ server to perform authorisation based on the client IP address.
 * [rabbitmq-lager](https://github.com/hyperthunk/rabbitmq-lager), [Basho's Lager logging](https://github.com/basho/lager) syslog-friendly framework as a RabbitMQ plugin.
-
+* [rabbitmq-message-timestamp](https://github.com/rabbitmq/rabbitmq-message-timestamp), Insert timestamp when message was recieved.
 
 ### Further reading
 
