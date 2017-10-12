@@ -3,6 +3,12 @@
 
 ## Binary sources
 
+`gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 0x6B73A36E6026DFCA`
+```wget https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+gpg --import rabbitmq-release-signing-key.asc```
+
+Trust by signing the key `gpg --sign-key 0x6B73A36E6026DFCA`
+
 files/rabbitmq-erlang.repo
 ```config
 [rabbitmq-erlang]
@@ -67,6 +73,33 @@ Link clusters (with different versions) together over WAN.
 
 https://www.rabbitmq.com/federation.html
 https://github.com/rabbitmq/rabbitmq-federation-management
+
+### Testing
+
+[amqpc](https://github.com/gocardless/amqpc.git) is CLI tool for testing AMQP brokers
+
+### Monitoring
+
+[Datadog](https://docs.datadoghq.com/integrations/rabbitmq/) integration
+
+### Database Integration
+
+[pgsql-listen-exchange](https://github.com/gmr/pgsql-listen-exchange) translates PostgreSQL's NOTIFY messages to AMQP messages and publishes them to bound queues. 
+
+### Administration
+
+[rabbitmqadmin](https://www.rabbitmq.com/management-cli.html), the RabbitMQ Management command line tool
+[amqp-utils](https://github.com/dougbarth/amqp-utils), command line utils for interacting with an AMQP based queue (in Ruby)
+[amqptools](https://github.com/rmt/amqptools), command line AMQP clients (in C)
+
+### Community Plugins
+
+[rabbitmq_management_themes](https://github.com/rabbitmq/rabbitmq-management-themes), Adds the possibility to customize the management web UI look.
+[autocluster](https://github.com/rabbitmq/rabbitmq-autocluster), Adds the possibility to automatically cluster RabbitMQ nodes using Consul, etcd or DNS for service discovery.
+
+[rabbitmq-auth-backend-ip-range](https://github.com/gotthardp/rabbitmq-auth-backend-ip-range), Provides the ability for your RabbitMQ server to perform authorisation based on the client IP address.
+
+[rabbitmq-lager)(https://github.com/hyperthunk/rabbitmq-lager), [Basho's Lager logging](https://github.com/basho/lager) framework as a RabbitMQ plugin.
 
 
 ### Further reading
