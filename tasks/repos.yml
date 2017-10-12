@@ -1,11 +1,10 @@
 ---
-- name: [REPO] Install bintraybintray-rabbitmq-rabbitmq-server-rpm
+- name: Install bintraybintray-rabbitmq-rabbitmq-server-rpm
   yum_repository:
+    description: packages by rabbitmq from Bintray
     name: bintraybintray-rabbitmq-rabbitmq-server-rpm
     baseurl: https://dl.bintray.com/rabbitmq/rabbitmq-server-rpm
     gpgcheck: yes
     gpgkey: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
-    repo_gpgcheck: 0
     enabled: yes
-    description: packages by rabbitmq from Bintray
   register: repo_status
