@@ -11,8 +11,9 @@
 
 - name: Install rabbitmq erlang repo
   yum_repository:
+    description: zero-dependency erlang package for rabbitmq
     name: rabbitmq-erlang
-    baseurl: "https://dl.bintray.com/rabbitmq/rpm/erlang/{{ erlang_version.split('.')[0] }}/el/$releasever"
+    baseurl: "https://dl.bintray.com/rabbitmq/rpm/erlang/{{ rabbitmq_erlang_version.split('.')[0] }}/el/$releasever"
     gpgkey: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
     gpgcheck: yes
     enabled: yes
