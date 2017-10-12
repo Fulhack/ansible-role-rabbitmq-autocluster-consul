@@ -1,0 +1,19 @@
+Configuration Details
+
+| Setting | Environment Variable | Setting Key | Type | Default |
+| ------- | -------------------- | ----------- | ---- | ------- |
+| Consul Scheme | CONSUL_SCHEME | consul_scheme | string | http |
+| Consul Host | CONSUL_HOST | consul_host | string | localhost |
+| Consul Port | CONSUL_PORT | consul_port | integer | 8500 |
+| Consul ACL Token | CONSUL_ACL_TOKEN | consul_acl_token | string |  |
+| Service Name | CONSUL_SVC | consul_svc | string | rabbitmq |
+| Service Address | CONSUL_SVC_ADDR | consul_svc_addr | string |  |
+| Service Auto Address | CONSUL_SVC_ADDR_AUTO | consul_svc_addr_auto | boolean | false |
+| Service Auto Address by NIC | CONSUL_SVC_ADDR_NIC | consul_svc_addr_nic | string |  |
+| Service Port | CONSUL_SVC_PORT | consul_svc_port | integer | 5672 |
+| Service TTL | CONSUL_SVC_TTL | consul_svc_ttl | integer | 30 |
+| Service Tags | CONSUL_SVC_TAGS | consul_svc_tags | list | [] |
+| Service unregistration timeout | CONSUL_DEREGISTER_AFTER | consul_deregister_after | integer | 60 |
+| Consul Use Longname | CONSUL_USE_LONGNAME | consul_use_longname | boolean | false |
+| Consul Domain | CONSUL_DOMAIN | consul_domain | string | consul |
+| Include nodes that fail Consul health checks? | CONSUL_INCLUDE_NODES_WITH_WARNINGS | consul_include_nodes_with_warnings | boolean | false |
