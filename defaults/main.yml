@@ -1,9 +1,10 @@
 ---
 rabbitmq_server_version: "3.6.12"
 rabbitmq_autocluster_version: "0.9.0"
-rabbitmq_aws: "0.9.0"
-rabbitmq_message_timestamp: "1.0.0"
+rabbitmq_aws_version: "0.9.0"
+rabbitmq_message_timestamp_version: "1.0.0"
 rabbitmq_erlang_version: "20.1.2"
+rabbitmq_delayed_message_exchange_version: "0.0.1"
 
 rabbitmq_plugins: []
 
