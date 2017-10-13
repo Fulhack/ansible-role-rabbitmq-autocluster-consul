@@ -1,10 +1,19 @@
 ---
-rabbitmq_server_version: "3.6.12"
+rabbitmq_server_rpm_version: "3.6.12"
+rabbitmq_erlang_rpm_version: "20.1.1"
+rabbitmq_git_tag: "rabbitmq_v3_6_12"
+rabbitmq_release_signing_key:
+  - gpgkey: 0x6B73A36E6026DFCA
+  - url: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+
 rabbitmq_autocluster_version: "0.9.0"
 rabbitmq_aws_version: "0.9.0"
-rabbitmq_message_timestamp_version: "1.0.0"
-rabbitmq_erlang_version: "20.1.2"
-rabbitmq_delayed_message_exchange_version: "0.0.1"
+rabbitmq_message_timestamp_version: "3.6.x-6a09867d"
 
-rabbitmq_plugins: []
-
+rabbitmq_community_plugins:
+  - rabbitmq_auth_backend_ip_range:
+    version: "0.2.0",
+    sha256: 7af3a601ff6db0c166db6c23cd9a1f252ee18b99d53103a0c7ee8df0a5398095
+  - rabbitmq_delayed_message_exchange_version:
+    version: "0.0.1"
+    sha256: bb5c371168b212907bb9e4598f12b0a585f9ec64bdab92bf353578a5491ea5e9
