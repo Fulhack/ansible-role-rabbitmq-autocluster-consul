@@ -1,19 +1,65 @@
 ---
-rabbitmq_server_rpm_version: "3.6.12"
-rabbitmq_erlang_rpm_version: "20.1.1"
-rabbitmq_git_tag: "rabbitmq_v3_6_12"
+rabbitmq_server_rpm_version: 3.6.12
+rabbitmq_erlang_rpm_version: 20.1.1
+rabbitmq_git_tag: rabbitmq_v3_6_12
+rabbitmq_autocluster_version: 0.9.0
+# rabbitmq_aws_version: "0.9.0"
+rabbitmq_message_timestamp_version: 3.6.x-6a09867d
+rabbitmq_erlang_rpm_version_major: "{{ rabbitmq_erlang_rpm_version.split('.')[0] | default('20')}}"
+rabbitmq_manage: True
+make_rabbitmq_user: True
+rabbitmq_plugins_dir: "/usr/lib/rabbitmq/lib/rabbitmq_server-{{ rabbitmq_server_rpm_version }}/plugins"
+
 rabbitmq_release_signing_key:
   - gpgkey: 0x6B73A36E6026DFCA
-  - url: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+    url: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
 
-rabbitmq_autocluster_version: "0.9.0"
-rabbitmq_aws_version: "0.9.0"
-rabbitmq_message_timestamp_version: "3.6.x-6a09867d"
+rabbitmq_custom_plugins:
+  - autocluster
+  - rabbitmq_aws
+
+rabbitmq_autocluster_plugins:
+  - name: autocluster
+    url: "https://github.com/rabbitmq/rabbitmq-autocluster/releases/download/{{ rabbitmq_autocluster_version }}/autocluster-{{ rabbitmq_autocluster_version }}.ez"
+    checksum: sha256:c4c48e291e676e90f03297ed61a6a28a37fd1ef0569db05f278693abb1e39aa6
+  - name: rabbitmq_aws
+    url: "https://github.com/rabbitmq/rabbitmq-autocluster/releases/download/{{ rabbitmq_autocluster_version }}/rabbitmq_aws-{{ rabbitmq_autocluster_version }}.ez"
+    checksum: sha256:2d989cf9d7bfca5b654163884e84748411d62b1b27514e8fc25e57d33ea4ad26
 
 rabbitmq_community_plugins:
   - rabbitmq_auth_backend_ip_range:
-    version: "0.2.0",
+    version: 0.2.0
     sha256: 7af3a601ff6db0c166db6c23cd9a1f252ee18b99d53103a0c7ee8df0a5398095
   - rabbitmq_delayed_message_exchange_version:
-    version: "0.0.1"
+    version: 0.0.1
     sha256: bb5c371168b212907bb9e4598f12b0a585f9ec64bdab92bf353578a5491ea5e9
+
+# Cluster information
+
+rabbitmq_use_ssl: False
+rabbitmq_ca_certificate_path: "/noop"
+rabbitmq_server_certificate_path: ""
+rabbitmq_server_key_path: ""
+
+# RabbitMQ user premissions
+rabbitmq_configure_priv: .*
+rabbitmq_read_priv: .*
+rabbitmq_write_priv: .*
+rabbitmq_user_state: present
+
+# RabbitMQ (erlang.cookie)
+rabbitmq_cookie: XPVTRGPZHAQYKQHKEBUF
+rabbitmq_nodename: rabbit
+rabbitmq_nodename_suffix: ""
+rabbitmq_ssl_listeners: ""
+
+# RabbitMQ (rabbitmq.config)
+rabbitmq_amqp_port: 5672
+rabbitmq_loopback_users: [ guest ]
+rabbitmq_default_vhost: /
+rabbitmq_default_user: ansible
+rabbitmq_default_pass: ansible
+rabbitmq_default_user_tags: administrator
+rabbitmq_disk_free_limit: 0.7
+rabbitmq_high_watermark: 0.4
+rabbitmq_high_watermark_paging: 0.5
