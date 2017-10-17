@@ -16,7 +16,6 @@ rabbitmq_release_signing_key:
 
 rabbitmq_custom_plugins:
   - autocluster
-  - rabbitmq_aws
 
 rabbitmq_autocluster_plugins:
   - name: autocluster
@@ -63,3 +62,15 @@ rabbitmq_default_user_tags: administrator
 rabbitmq_disk_free_limit: 0.7
 rabbitmq_high_watermark: 0.4
 rabbitmq_high_watermark_paging: 0.5
+
+rabbitmq_autocluster_backend: consul
+rabbitmq_autocluster_delay: 60
+rabbitmq_consul_svc: rabbitmq
+rabbitmq_consul_cluster_name: rabbitmq
+rabbitmq_consul_host: localhost
+rabbitmq_consul_port: 8500
+rabbitmq_consul_svc_addr_nodename: true
+rabbitmq_consul_svc_addr_auto: true
+rabbitmq_autocluster_cleanup: true
+rabbitmq_cleanup_warn_only: false
+rabbitmq_consul_deregister_after: 60

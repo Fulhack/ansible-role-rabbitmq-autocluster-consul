@@ -1,0 +1,28 @@
+[{rabbit, [
+  {tcp_listeners, [{{ rabbitmq_amqp_port }}]},
+  {log_levels, [{autocluster, debug}, {connection, info}]},
+{% if rabbitmq_loopback_users|length > 0 %}
+  {loopback_users, [<<"{{ rabbitmq_loopback_users|join('">>, <<"') }}">>]},
+{% else %}
+  {loopback_users, []},
+{% endif %}
+  {default_vhost,       <<"{{ rabbitmq_default_vhost }}">>},
+  {default_user,        <<"{{ rabbitmq_default_user }}">>},
+  {default_pass,        <<"{{ rabbitmq_default_pass }}">>},
+  {default_permissions, [<<".*">>, <<".*">>, <<".*">>]},
+  {default_user_tags, [{{ rabbitmq_default_user_tags }}]},
+  {channel_max, 128},
+
+  {vm_memory_high_watermark, {{ rabbitmq_high_watermark }} },
+  {vm_memory_high_watermark_paging_ratio, {{ rabbitmq_high_watermark_paging }} },
+
+  {disk_free_limit, {mem_relative, {{rabbitmq_disk_free_limit}} }}
+  ]},
+  {autocluster, [
+    {backend, {{ rabbitmq_autocluster_backend }}},
+    {consul_host, "{{ rabbitmq_consul_host }}"},
+    {consul_port, {{ rabbitmq_consul_port }}},
+    {consul_svc, "{{ rabbitmq_consul_svc}}"},
+    {cluster_name, "{{ rabbitmq_consul_cluster_name}}"}
+    ]}
+].
