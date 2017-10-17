@@ -1,0 +1,132 @@
+# Tasks for installing and configuring RabbitMQ and custom plugins on the system
+
+- name: Import rabbitmq repo key from key servers
+  rpm_key:
+    key: "{{ rabbitmq_release_signing_key[0].url }}"
+    state: present
+  register: rpm_key_import
+
+# - name: Add repo rabbitmq-erlang
+#   yum_repository:
+#     # repo: "{{ ansible_distribution_release }}"
+#     name: rabbitmq-erlang
+#     baseurl: "https://dl.bintray.com/rabbitmq/rpm/erlang/{{ rabbitmq_erlang_version_major }}/el/$releasever"
+#     gpgcheck: yes
+#     gpgkey: "{{ rabbitmq_release_signing_key[url] }}"
+#     enabled: yes
+#     state: present
+#     update_cache: yes
+#   when:
+#     - ansible_distribution == 'CentOS'
+#     - rabbitmq_server_rpm_version is defined
+#     - rabbitmq_erlang_rpm_version is defined
+
+- name: Show hostname for RabbitMQ instance at time of installation
+  shell: "hostname"
+  register: hostname_return
+
+- name: debug hostname
+  debug: msg={{ hostname_return }}
+
+# - name: Install erlang and rabbitmq-server packages (from Erlang Solutions repo)
+#   package:
+#     name: "{{ item }}"
+#     state: present
+#   when: use_erlang_solutions_repo
+#   with_items:
+#     - esl-erlang={{ erlang_version }}
+#     - rabbitmq-server={{ rabbitmq_version }}
+
+- name: Install rabbitmq-server package (from RabbitMQ repo)
+  yum:
+    name: "rabbitmq-server-{{ rabbitmq_server_rpm_version }}"
+    state: present
+  # when: not use_erlang_solutions_repo
+
+- name: Start rabbitmq-server in order to use the rabbitctl command in next task
+  service:
+    name: rabbitmq-server
+    state: started
+
+# - name: Use specified plugin dir if defined
+#   set_fact:
+#     rabbitmq_plugins_dir
+#
+# - name: Get rabbitmq plugins dir
+#   shell: rabbitmqctl environment | grep -A 1 plugins_dir | grep -oE '"/.+"' | cut -d ':' -f 2 | tr -d '"'
+#   register: rabbitmq_plugins_dir
+#   when: rabbitmq_plugins_dir not defined
+
+
+- name: Output RabbitMQ plugins path
+  debug:
+    msg: "{{ rabbitmq_plugins_dir }}"
+  when: rabbitmq_plugins_dir is defined
+
+- name: Plugins to download debug output
+  debug:
+    msg: "{{ item.url }} -> {{ rabbitmq_plugins_dir }}"
+  with_list: '{{ rabbitmq_autocluster_plugins }}'
+
+- name: Download autocluster plugins into the plugins dir
+  get_url:
+    url: "{{ item.url }}"
+    checksum: "{{ item.checksum }}"
+    dest: "{{ rabbitmq_plugins_dir }}"
+  with_list: '{{ rabbitmq_autocluster_plugins }}'
+
+# - name: Place custom plugins into the plugins dir
+#   copy:
+#     src: "{{ item }}.ez"
+#     dest: "{{ rabbitmq_plugins_dir }}"
+#   with_items: '{{ rabbitmq_custom_plugins }}'
+#
+- name: Stop rabbitmq-server to add config file
+  service:
+    name: rabbitmq-server
+    state: stopped
+
+- name: Hack in the custom plugins
+  copy:
+    src: files/enabled_plugins
+    dest: /etc/rabbitmq/enabled_plugins
+    mode: 0640
+    owner: root
+    group: rabbitmq
+
+- name: Configure rabbitmq-server
+  template:
+    src: rabbitmq.config.consul.j2
+    dest: /etc/rabbitmq/rabbitmq.config
+
+- name: Start rabbitmq-server to enable plugins and add users
+  service:
+    name: rabbitmq-server
+    state: started
+    enabled: yes
+
+# - name: Enable custom plugins
+#   rabbitmq_plugin:
+#     new_only: yes # keeps previously installed plugins
+#     name: "{{ item.name }}"
+#     state: enabled
+#   with_list: '{{ rabbitmq_autocluster_plugins }}'
+
+- name: Enable management plugin
+  rabbitmq_plugin:
+    new_only: yes # keeps previously installed plugins
+    name: rabbitmq_management
+    state: enabled
+  when: rabbitmq_manage
+
+- name: Setup rabbitmq user with admin access
+  rabbitmq_user:
+    user: "{{ rabbitmq_default_user }}"
+    password: "{{ rabbitmq_default_pass }}"
+    vhost: "{{ rabbitmq_default_vhost }}"
+    configure_priv: "{{ rabbitmq_configure_priv }}"
+    read_priv: "{{ rabbitmq_read_priv }}"
+    write_priv: "{{ rabbitmq_write_priv }}"
+    tags: "{{ rabbitmq_default_user_tags }}"
+    state: "{{ rabbitmq_user_state }}"
+  when: make_rabbitmq_user
